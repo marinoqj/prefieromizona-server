@@ -10,7 +10,7 @@ pipeline {
     stage('Build') {
       steps {
         withMaven(maven : 'mvn-3.6.0') {
-          sh 'mvn package'
+          sh 'mvn package -P prod'
         }
       }
     }
