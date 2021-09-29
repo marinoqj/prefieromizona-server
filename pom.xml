@@ -131,22 +131,15 @@
 	<!-- Para generar el JAR para un entorno u otro con profile -->	
 	<profiles>
 		<profile>
-			<id>local</id>
+			<id>dev</id>
 			<activation>
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<properties>
-				<environment.properties>application-local.properties</environment.properties>
-				<environment.name>LOCAL</environment.name>
+				<environment.properties>application-dev.properties</environment.properties>
+				<environment.name>DEV</environment.name>
 			</properties>
 		</profile>
-		<profile>
-			<id>pre</id>
-			<properties>
-				<environment.properties>application-pre.properties</environment.properties>
-				<environment.name>PRE</environment.name>
-			</properties>
-		</profile>					
 		<profile>
 			<id>prod</id>
 			<properties>
