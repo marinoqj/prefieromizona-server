@@ -10,12 +10,61 @@
 	</parent>
 	<groupId>es.golemdr.prefieromizona</groupId>
 	<artifactId>prefieromizona-server</artifactId>
-	<version>1.0.2</version>
+	<version>1.0.0</version>
 	<name>prefieromizona</name>
 	<description>Servidor con REST</description>
 
 	<properties>
-		<java.version>1.8</java.version>
+		<project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding> 
+		<java-version>1.8</java-version>
+		<org.springframework-version>5.3.6</org.springframework-version>
+		<spring-security-version>5.2.6.RELEASE</spring-security-version>
+		<spring-data-mongodb-version>3.1.12</spring-data-mongodb-version>
+		<org.aspectj-version>1.8.1</org.aspectj-version>
+		<hibernate.version>5.2.11.Final</hibernate.version>
+		<c3p0.version>0.9.5.2</c3p0.version>
+		<org.mongodb-version>4.1.2</org.mongodb-version>
+		<!--  This format is used by SonarQube. If you need another format see "buildnumber-maven-plugin" -->
+		<maven.build.timestamp.format>MM.yyyy</maven.build.timestamp.format>
+		<yearMonth>${maven.build.timestamp}</yearMonth>    
+		<!-- ************************-->
+		<!-- Sonar/Reporting settings -->
+		<!-- ************************-->
+		<!-- Sonar/Jacoco integration. Note that these properties need to be defined outside the "coverage" profile
+		because we want to be to able to execute mvn sonar:sonar without passing a profile -->
+		<!-- Tells Sonar to use jacoco for coverage results -->
+		<sonar.projectKey>es.golemdr.prefieromizona:prefieromizona-server</sonar.projectKey>
+		<sonar.projectName>prefieromizona</sonar.projectName>
+		<sonar.projectVersion>${yearMonth}</sonar.projectVersion>
+		<sonar.language>java</sonar.language>
+		<sonar.sourceEncoding>ISO-8859-1</sonar.sourceEncoding>
+		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+		<!-- Jacoco version to use -->
+		<jacoco.version>0.7.2.201409121644</jacoco.version>
+		<!-- The Sonar Jacoco Listener for JUnit to extract coverage details per test -->
+		<sonar-jacoco-listeners.version>1.4</sonar-jacoco-listeners.version>
+		<!-- Don't let Sonar execute tests. We will ask it to Maven 'sonar.dynamicAnalysis' is deprecated since version 4.3 and should no longer be used. -->
+		<!-- <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis> -->
+		<!-- The system property jacoco.outputDir needs to be override on the command line
+		    with an absolute path if you want to merge results from all modules.
+		    Example in a Jenkisn build where ${WORKSPACE} is defined and your project in the root directory of the workspace :
+		    mvn clean install -Prun-its,coverage -Djacoco.outputDir=${WORKSPACE}/target
+		    Note that unfortunately using the following does not work because of
+		    http://jira.codehaus.org/browse/SONAR-3427:
+		<jacoco.outputDir>${session.executionRootDirectory}/target/</jacoco.outputDir>
+		-->
+		<jacoco.outputDir>${project.build.directory}</jacoco.outputDir>
+		<!-- Jacoco output file for UTs -->
+		<jacoco.out.ut.file>jacoco-ut.exec</jacoco.out.ut.file>
+		<!-- Tells Sonar where the Jacoco coverage result file is located for Unit Tests -->
+		<sonar.jacoco.reportPath>${jacoco.outputDir}/${jacoco.out.ut.file}</sonar.jacoco.reportPath>
+		<!-- Jacoco output file for ITs -->
+		<jacoco.out.it.file>jacoco-it.exec</jacoco.out.it.file>
+		<!-- Tells Sonar where the Jacoco coverage result file is located for Integration Tests -->
+		<sonar.jacoco.itReportPath>${jacoco.outputDir}/${jacoco.out.it.file}</sonar.jacoco.itReportPath>
+		<!-- <sonar.junit.reportsPath>${project.build.directory}/surefire-reports/</sonar.junit.reportsPath> -->
+		<!-- <sonar.tests>src/test/java</sonar.tests> -->
+		<!-- === END of Sonar/Reporting settings === -->
 	</properties>
 
 	<dependencies>
@@ -78,6 +127,123 @@
 		    <version>3.0.0</version>
 		</dependency>
 	</dependencies>
+	
+	<!-- Para generar el JAR para un entorno u otro con profile -->	
+	<profiles>
+		<profile>
+			<id>local</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<environment.properties>application-local.properties</environment.properties>
+				<environment.name>LOCAL</environment.name>
+			</properties>
+		</profile>
+		<profile>
+			<id>pre</id>
+			<properties>
+				<environment.properties>application-pre.properties</environment.properties>
+				<environment.name>PRE</environment.name>
+			</properties>
+		</profile>					
+		<profile>
+			<id>prod</id>
+			<properties>
+				<environment.properties>application-prod.properties</environment.properties>
+				<environment.name>PROD</environment.name>
+			</properties>
+		</profile>
+		<!-- coverage -->
+		<profile>
+		    <id>coverage</id>
+		    <build>
+		        <plugins>
+		            <plugin>
+		                <groupId>org.apache.maven.plugins</groupId>
+		                <artifactId>maven-surefire-plugin</artifactId>
+		                <configuration>
+				            <systemPropertyVariables>
+				                <appConfig>${environment.properties}</appConfig>
+				            </systemPropertyVariables>		                
+		                    <argLine>${jacoco.agent.ut.arg}</argLine>
+		                    <!-- Specific to generate mapping between tests and covered code -->
+		                    <properties>
+		                        <property>
+		                            <name>listener</name>
+		                            <value>org.sonar.java.jacoco.JUnitListener</value>
+		                        </property>
+		                    </properties>
+		                    <!-- test failure ignore -->
+		                    <testFailureIgnore>true</testFailureIgnore>
+		                </configuration>
+		            </plugin>
+		            <plugin>
+		                <groupId>org.apache.maven.plugins</groupId>
+		                <artifactId>maven-failsafe-plugin</artifactId>
+		                <configuration>
+		                    <argLine>-Xmx1024m -XX:MaxPermSize=256m ${jacoco.agent.it.arg}
+		                    </argLine>
+		                    <!-- Specific to generate mapping between tests and covered code -->
+		                    <properties>
+		                        <property>
+		                            <name>listener</name>
+		                            <value>org.sonar.java.jacoco.JUnitListener</value>
+		                        </property>
+		                    </properties>
+		                    <!-- Let's put failsafe reports with surefire to have access to tests 
+		                        failures/success reports in sonar -->
+		                    <reportsDirectory>${project.build.directory}/surefire-reports
+		                    </reportsDirectory>
+		                </configuration>
+		            </plugin>
+		            <plugin>
+		                <groupId>org.jacoco</groupId>
+		                <artifactId>jacoco-maven-plugin</artifactId>
+		                <version>${jacoco.version}</version>
+		                <executions>
+		                    <!-- Prepares a variable, jacoco.agent.ut.arg, that contains the info 
+		                        to be passed to the JVM hosting the code being tested. -->
+		                    <execution>
+		                        <id>prepare-ut-agent</id>
+		                        <phase>process-test-classes</phase>
+		                        <goals>
+		                            <goal>prepare-agent</goal>
+		                        </goals>
+		                        <configuration>
+		                            <destFile>${sonar.jacoco.reportPath}</destFile>
+		                            <propertyName>jacoco.agent.ut.arg</propertyName>
+		                            <append>true</append>
+		                        </configuration>
+		                    </execution>
+		                    <!-- Prepares a variable, jacoco.agent.it.arg, that contains the info 
+		                        to be passed to the JVM hosting the code being tested. -->
+		                    <execution>
+		                        <id>prepare-it-agent</id>
+		                        <phase>pre-integration-test</phase>
+		                        <goals>
+		                            <goal>prepare-agent</goal>
+		                        </goals>
+		                        <configuration>
+		                            <destFile>${sonar.jacoco.itReportPath}</destFile>
+		                            <propertyName>jacoco.agent.it.arg</propertyName>
+		                            <append>true</append>
+		                        </configuration>
+		                    </execution>
+		                </executions>
+		            </plugin>		            
+		        </plugins>
+		    </build>
+		    <dependencies>
+		        <dependency>
+		            <groupId>org.codehaus.sonar-plugins.java</groupId>
+		            <artifactId>sonar-jacoco-listeners</artifactId>
+		            <version>${sonar-jacoco-listeners.version}</version>
+		            <scope>test</scope>
+		        </dependency>
+		    </dependencies>
+		</profile>		
+	</profiles>	
 
 	<build>
 		<defaultGoal>package</defaultGoal>
@@ -87,7 +253,77 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-application-properties</id>
+						<phase>test</phase>
+						<configuration>
+							<target>
+								<delete file="src/main/resources/application.properties"/>
+								<copy file="src/main/resources/${environment.properties}" tofile="src/main/resources/application.properties"/>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>reset-application-properties</id>
+						<phase>verify</phase>
+						<configuration>
+							<target>
+								<delete file="src/main/resources/application.properties"/>
+								<copy file="src/main/resources/application-local.properties" tofile="src/main/resources/application.properties"/>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>					
+				</executions>			
+			</plugin>
+			<!-- Para la integración con Sonar -->
+			<plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>3.9.0.2155</version>
+            </plugin>			
+			<!--  Para generar la imagen de Docker -->	
+            <plugin>
+			  <groupId>com.spotify</groupId>
+			  <artifactId>dockerfile-maven-plugin</artifactId>
+			  <version>1.4.13</version>
+			  <executions>
+			    <execution>
+			      <id>default</id>
+			      <goals>
+			        <goal>build</goal>
+			        <goal>push</goal>
+			      </goals>
+			    </execution>
+			  </executions>
+			  <configuration>
+			  	<useMavenSettingsForAuth>true</useMavenSettingsForAuth>
+                <username>marinoqj</username>
+                <password>8e667415-0922-4ec0-b06b-2896c4c5aa58</password>
+			    <repository>marinoqj/prefieromizona-server</repository>
+			    <tag>${project.version}</tag>
+			  </configuration>
+			</plugin>			
 		</plugins>
+		<!-- Para incluir dinamicamente propiedades de Maven - Cuidado si se utilizan binarios de jasper: se corrompen con estos filtros-->
+		<resources>
+			 <resource>
+			   <directory>src/main/resources</directory>
+			   <filtering>true</filtering>
+			   <excludes>
+			   		<exclude>application-dev.properties</exclude>
+			   		<exclude>application-prod.properties</exclude>
+			   </excludes>			  		   		 
+			 </resource>
+		</resources>			
 	</build>
 
 </project>
