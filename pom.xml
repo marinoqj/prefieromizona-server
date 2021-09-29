@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>es.golemdr.prefieromizona</groupId>
 	<artifactId>prefieromizona-server</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 	<name>prefieromizona</name>
 	<description>Servidor con REST</description>
 
@@ -268,7 +268,7 @@
 						<configuration>
 							<target>
 								<delete file="src/main/resources/application.properties"/>
-								<copy file="src/main/resources/application-local.properties" tofile="src/main/resources/application.properties"/>
+								<copy file="src/main/resources/application-dev.properties" tofile="src/main/resources/application.properties"/>
 							</target>
 						</configuration>
 						<goals>
