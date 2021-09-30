@@ -9,6 +9,7 @@ public class UrlConstants {
 	public static final String CLIENTES = "/clientes";
 	public static final String CLIENTES_ID = "/clientes/{id}";
 	public static final String CLIENTES_PAGINADO = "/clientes/paginado";
+	public static final String CLIENTES_BUSCAR_COD_CLIENTE = "/clientes/buscar/{codCliente}";
 
 	
 
@@ -16,6 +17,7 @@ public class UrlConstants {
 	public static final String COMERCIOS = "/comercios";
 	public static final String COMERCIOS_ID = "/comercios/{id}";
 	public static final String COMERCIOS_PAGINADO = "/comercios/paginado";
+	public static final String COMERCIOS_BUSCAR_COD_COMERCIO= "/comercios/buscar/{codComercio}";
 
 	
 

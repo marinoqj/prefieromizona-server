@@ -64,6 +64,17 @@ public class ClientesService {
 			clientesRepository.deleteById(idCliente);
 
 		}
+		
+		/**
+		 * Método para búsquedas exactas. Se utiliza la implementación por defecto de JPARepository
+		 * @param example
+		 * @return
+		 */
+		public Cliente findByExample(Example<Cliente> example){
+			
+			return clientesRepository.findOne(example).get();
+			
+		}
 
 
 }

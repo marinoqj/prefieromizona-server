@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -138,7 +139,30 @@ public class ClientesController {
 		return resultado;
 	}
 
+	@GetMapping(UrlConstants.CLIENTES_BUSCAR_COD_CLIENTE)
+	public ResponseEntity<?> buscarClienteCod(@PathVariable("codCliente") String codCliente) {
 
+		ResponseEntity<?> resultado = null;
+		Cliente cliente = null;
+		Cliente filtro = new Cliente();
+		filtro.setCodCliente(codCliente);
+		
+		try {
+			
+			Example<Cliente> example = Example.of(filtro);
+			
+			cliente = clientesService.findByExample(example);
+					
+			resultado = new ResponseEntity<Cliente>(cliente, HttpStatus.OK);
+			
+		}catch (Exception e) {	
+						
+			log.error("Se produjo la excepción:" + e.getMessage());
+			resultado =  new ResponseEntity<String>("No se encontró ningún cliente con los datos de búsqueda ", HttpStatus.NOT_FOUND);			
+		}
+
+		return resultado;
+	}
 
 }
 

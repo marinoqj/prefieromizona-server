@@ -11,7 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-
+import es.golemdr.prefieromizona.domain.Cliente;
 import es.golemdr.prefieromizona.domain.Comercio;
 import es.golemdr.prefieromizona.repository.ComerciosRepository;
 
@@ -63,6 +63,17 @@ public class ComerciosService {
 
 			comerciosRepository.deleteById(idComercio);
 
+		}
+		
+		/**
+		 * Método para búsquedas exactas. Se utiliza la implementación por defecto de JPARepository
+		 * @param example
+		 * @return
+		 */
+		public Comercio findByExample(Example<Comercio> example){
+			
+			return comerciosRepository.findOne(example).get();
+			
 		}
 
 

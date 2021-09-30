@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -136,6 +137,31 @@ public class ComerciosController {
 		total = comerciosService.getTotalComercios();
 		response.addHeader(Constantes.PAGINACION_TOTAL, String.valueOf(total));
 		
+		return resultado;
+	}
+	
+	@GetMapping(UrlConstants.COMERCIOS_BUSCAR_COD_COMERCIO)
+	public ResponseEntity<?> buscarComercioCod(@PathVariable("codComercio") String codComercio) {
+
+		ResponseEntity<?> resultado = null;
+		Comercio comercio = null;
+		Comercio filtro = new Comercio();
+		filtro.setCodComercio(codComercio);;
+		
+		try {
+			
+			Example<Comercio> example = Example.of(filtro);
+			
+			comercio = comerciosService.findByExample(example);
+					
+			resultado = new ResponseEntity<Comercio>(comercio, HttpStatus.OK);
+			
+		}catch (Exception e) {	
+						
+			log.error("Se produjo la excepción:" + e.getMessage());
+			resultado =  new ResponseEntity<String>("No se encontró ningún cliente con los datos de búsqueda ", HttpStatus.NOT_FOUND);			
+		}
+
 		return resultado;
 	}
 
