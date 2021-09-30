@@ -4,6 +4,7 @@ package es.golemdr.prefieromizona.controller;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,7 +25,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import es.golemdr.prefieromizona.controller.constantes.UrlConstants;
+import es.golemdr.prefieromizona.domain.Comercio;
 import es.golemdr.prefieromizona.domain.Compra;
+import es.golemdr.prefieromizona.ext.Constantes;
 import es.golemdr.prefieromizona.service.ComprasService;
 
 
@@ -120,7 +124,21 @@ public class ComprasController {
 		return resultado;
 	}
 
+	@GetMapping(UrlConstants.COMPRAS_PAGINADO)
+	public List<Compra> listadoComprasPaginado(@RequestHeader(Constantes.PAGINACION_INICIO) int inicio, 
+			@RequestHeader(Constantes.PAGINACION_ELEMENTOS_PAGINA) int elementosXpagina,
+			HttpServletResponse response) throws JsonProcessingException {
+		
+		List<Compra> resultado = null;
+		resultado = comprasService.getCompras(inicio, elementosXpagina);
 
+		int total = 0;
+		total = comprasService.getTotalCompras();
+		response.addHeader(Constantes.PAGINACION_TOTAL, String.valueOf(total));
+		
+		return resultado;
+	
+
+	}
 
 }
-

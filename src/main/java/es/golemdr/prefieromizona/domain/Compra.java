@@ -3,11 +3,15 @@ package es.golemdr.prefieromizona.domain;
 
 import java.sql.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -23,54 +27,70 @@ public class Compra{
 	private Date fechaCompra;
 	private Long puntos;
 	private Date fechaCanje;
-	private Long idComercio;
-	private Long idCliente;
+
+	private Cliente cliente;
+	private Comercio comercio;
+	
 
 
 
-@Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
-@Column(name="ID_COMPRA")
-public Long getIdCompra() {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ID_COMPRA")
+	public Long getIdCompra() {
 		return idCompra;
 	}
+
 	public void setIdCompra(Long idCompra) {
 		this.idCompra = idCompra;
 	}
-@Column(name="FECHA_COMPRA")
-public Date getFechaCompra() {
+
+	@Column(name = "FECHA_COMPRA")
+	public Date getFechaCompra() {
 		return fechaCompra;
 	}
+
 	public void setFechaCompra(Date fechaCompra) {
 		this.fechaCompra = fechaCompra;
 	}
-@Column(name="PUNTOS")
-public Long getPuntos() {
+
+	@Column(name = "PUNTOS")
+	public Long getPuntos() {
 		return puntos;
 	}
+
 	public void setPuntos(Long puntos) {
 		this.puntos = puntos;
 	}
-@Column(name="FECHA_CANJE")
-public Date getFechaCanje() {
+
+	@Column(name = "FECHA_CANJE")
+	public Date getFechaCanje() {
 		return fechaCanje;
 	}
+
 	public void setFechaCanje(Date fechaCanje) {
 		this.fechaCanje = fechaCanje;
 	}
-@Column(name="ID_COMERCIO")
-public Long getIdComercio() {
-		return idComercio;
+
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+	@JoinColumn(name = "id_cliente")
+	public Cliente getCliente() {
+		return cliente;
 	}
-	public void setIdComercio(Long idComercio) {
-		this.idComercio = idComercio;
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
-@Column(name="ID_CLIENTE")
-public Long getIdCliente() {
-		return idCliente;
+
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+	@JoinColumn(name = "id_comercio")
+	public Comercio getComercio() {
+		return comercio;
 	}
-	public void setIdCliente(Long idCliente) {
-		this.idCliente = idCliente;
+
+	public void setComercio(Comercio comercio) {
+		this.comercio = comercio;
 	}
+
 
 }
