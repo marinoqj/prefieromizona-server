@@ -26,7 +26,7 @@ public class Compra{
 	private Long idCompra;
 	private Date fechaCompra;
 	private Long puntos;
-	private Date fechaCanje;
+
 
 	private Cliente cliente;
 	private Comercio comercio;
@@ -61,15 +61,6 @@ public class Compra{
 
 	public void setPuntos(Long puntos) {
 		this.puntos = puntos;
-	}
-
-	@Column(name = "FECHA_CANJE")
-	public Date getFechaCanje() {
-		return fechaCanje;
-	}
-
-	public void setFechaCanje(Date fechaCanje) {
-		this.fechaCanje = fechaCanje;
 	}
 
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)

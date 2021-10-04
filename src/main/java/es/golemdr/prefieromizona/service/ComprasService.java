@@ -4,7 +4,15 @@ package es.golemdr.prefieromizona.service;
 import java.util.List;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
+import es.golemdr.prefieromizona.controller.ClientesController;
+import es.golemdr.prefieromizona.domain.Cliente;
+import es.golemdr.prefieromizona.domain.Comercio;
+import es.golemdr.prefieromizona.domain.Punto;
+import es.golemdr.prefieromizona.repository.PuntosRepository;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.PageRequest;
@@ -15,11 +23,18 @@ import org.springframework.stereotype.Service;
 import es.golemdr.prefieromizona.domain.Compra;
 import es.golemdr.prefieromizona.repository.ComprasRepository;
 
+import javax.transaction.Transactional;
+
 @Service
 public class ComprasService {
 
+		private static final Logger log = LogManager.getLogger(ComprasService.class);
+
 		@Autowired
 		private ComprasRepository comprasRepository;
+
+		@Autowired
+		private PuntosRepository puntosRepository;
 
 
 		public List<Compra> getCompras() {
@@ -44,8 +59,39 @@ public class ComprasService {
 
 		}
 
-
+		@Transactional
 		public Compra insertarActualizarCompra(Compra compra) {
+
+			Punto puntosClienteComercio = null;
+			Punto filtro = new Punto();
+
+			filtro.setCliente(compra.getCliente());
+			filtro.setComercio(compra.getComercio());
+
+			Example<Punto> unPunto = Example.of(filtro);
+
+			try{
+				puntosClienteComercio = puntosRepository.findOne(unPunto).get();
+			}catch (NoSuchElementException ex){
+				log.info("No se encontraron puntos para el cliente en el comercio");
+			}
+
+
+			if(puntosClienteComercio!= null){
+
+				puntosClienteComercio.setTotal(puntosClienteComercio.getTotal() + compra.getPuntos());
+
+			}else{
+
+				puntosClienteComercio = new Punto();
+				puntosClienteComercio.setCliente(compra.getCliente());
+				puntosClienteComercio.setComercio(compra.getComercio());
+				puntosClienteComercio.setTotal(compra.getPuntos());
+
+			}
+
+			puntosRepository.save(puntosClienteComercio);
+
 
 			return comprasRepository.save(compra);
 

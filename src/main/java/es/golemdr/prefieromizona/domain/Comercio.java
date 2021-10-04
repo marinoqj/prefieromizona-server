@@ -36,6 +36,12 @@ public class Comercio{
 	@JsonIgnore	
 	List<Compra> compras = new ArrayList<>(0);
 
+	@JsonIgnore
+	List<Canje> canjes = new ArrayList<>(0);
+	
+//	@JsonIgnore	
+//	List<Punto> puntos = new ArrayList<>(0);
+
 
 
 
@@ -118,5 +124,22 @@ public List<Compra> getCompras() {
 }
 public void setCompras(List<Compra> compras) {
 	this.compras = compras;
-}	
+}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "cliente")
+	public List<Canje> getCanjes() {
+		return canjes;
+	}
+
+	public void setCanjes(List<Canje> canjes) {
+		this.canjes = canjes;
+	}
+
+//@OneToMany(fetch = FetchType.LAZY, mappedBy = "cliente")
+//public List<Punto> getPuntos() {
+//	return puntos;
+//}
+//public void setPuntos(List<Punto> puntos) {
+//	this.puntos = puntos;
+//}
 }

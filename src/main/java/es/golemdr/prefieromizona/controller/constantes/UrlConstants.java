@@ -27,5 +27,18 @@ public class UrlConstants {
 	public static final String COMPRAS_PAGINADO = "/compras/paginado";
 
 	
+	// CANJES
+	public static final String CANJES = "/canjes";
+	public static final String CANJES_ID = "/canjes/{id}";
+	public static final String CANJES_PAGINADO = "/canjes/paginado";
+
+	
+
+	// PUNTOS
+	public static final String PUNTOS = "/puntos";
+	public static final String PUNTOS_ID = "/puntos/{id}";
+	public static final String PUNTOS_PAGINADO = "/puntos/paginado";
+	
+	
 
 }
