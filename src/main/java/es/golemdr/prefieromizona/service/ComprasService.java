@@ -2,28 +2,24 @@ package es.golemdr.prefieromizona.service;
 
 
 import java.util.List;
-
-import java.util.List;
 import java.util.NoSuchElementException;
 
-import es.golemdr.prefieromizona.controller.ClientesController;
-import es.golemdr.prefieromizona.domain.Cliente;
-import es.golemdr.prefieromizona.domain.Comercio;
-import es.golemdr.prefieromizona.domain.Punto;
-import es.golemdr.prefieromizona.repository.PuntosRepository;
+import javax.transaction.Transactional;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-
+import es.golemdr.prefieromizona.domain.Comercio;
 import es.golemdr.prefieromizona.domain.Compra;
+import es.golemdr.prefieromizona.domain.Punto;
 import es.golemdr.prefieromizona.repository.ComprasRepository;
-
-import javax.transaction.Transactional;
+import es.golemdr.prefieromizona.repository.PuntosRepository;
 
 @Service
 public class ComprasService {
@@ -51,6 +47,26 @@ public class ComprasService {
 			return comprasRepository.findAll(paginacion).getContent();
 
 		}
+		
+		public List<Compra> getComprasComercio(Long idComercio) {
+			
+			List<Compra> result = null;
+
+
+			Compra sample = new Compra();
+			Comercio comercio = new Comercio();
+			comercio.setIdComercio(idComercio);
+			sample.setComercio(comercio);
+			
+			ExampleMatcher matcher = ExampleMatcher.matchingAll();
+			Example<Compra> example = Example.of(sample, matcher);
+			
+			result = comprasRepository.findAll(example);
+
+			return result;
+
+		}
+		
 
 
 		public int getTotalCompras(){

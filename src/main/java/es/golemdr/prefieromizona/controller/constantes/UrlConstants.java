@@ -24,6 +24,7 @@ public class UrlConstants {
 	// COMPRAS
 	public static final String COMPRAS = "/compras";
 	public static final String COMPRAS_ID = "/compras/{id}";
+	public static final String COMPRAS_COMERCIO_ID = "/compras/comercio/{id}";
 	public static final String COMPRAS_PAGINADO = "/compras/paginado";
 
 	
