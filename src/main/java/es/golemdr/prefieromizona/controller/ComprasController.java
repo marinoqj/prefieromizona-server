@@ -25,7 +25,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import es.golemdr.prefieromizona.controller.constantes.UrlConstants;
-import es.golemdr.prefieromizona.domain.Comercio;
 import es.golemdr.prefieromizona.domain.Compra;
 import es.golemdr.prefieromizona.ext.Constantes;
 import es.golemdr.prefieromizona.service.ComprasService;
@@ -51,6 +50,15 @@ public class ComprasController {
 
 		return compras;
 	}
+	
+	@GetMapping(UrlConstants.COMPRAS_COMERCIO_ID)
+	public @ResponseBody List<Compra> listadoComprasComercio(@PathVariable("id") Long idComercio) {
+
+		List<Compra> compras = null;
+		compras = comprasService.getComprasComercio(idComercio);
+
+		return compras;
+	}	
 
 
 	@GetMapping(UrlConstants.COMPRAS_ID)
@@ -73,6 +81,8 @@ public class ComprasController {
 
 		return resultado;
 	}
+	
+	
 
 	@PostMapping(UrlConstants.COMPRAS)
 	public ResponseEntity<?> crearCompra(@RequestBody Compra compra) throws JsonProcessingException {
