@@ -38,7 +38,10 @@ public class UrlConstants {
 	public static final String PUNTOS = "/puntos";
 	public static final String PUNTOS_ID = "/puntos/{id}";
 	public static final String PUNTOS_PAGINADO = "/puntos/paginado";
-	
+
+
+	// USUARIOS
+	public static final String USUARIOS_LOGIN = "/usuarios/{login}";
 	
 
 }
