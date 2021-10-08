@@ -35,6 +35,7 @@ public class Comercio {
 	private String municipio;
 	private String codPostal;
 
+	@JsonIgnore
 	private Usuario usuario;
 
 	@JsonIgnore
@@ -43,8 +44,8 @@ public class Comercio {
 	@JsonIgnore
 	List<Canje> canjes = new ArrayList<>(0);
 
-//	@JsonIgnore	
-//	List<Punto> puntos = new ArrayList<>(0);
+	@JsonIgnore	
+	List<Punto> puntos = new ArrayList<>(0);
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -166,11 +167,11 @@ public class Comercio {
 		this.usuario = usuario;
 	}
 
-//@OneToMany(fetch = FetchType.LAZY, mappedBy = "cliente")
-//public List<Punto> getPuntos() {
-//	return puntos;
-//}
-//public void setPuntos(List<Punto> puntos) {
-//	this.puntos = puntos;
-//}
+@OneToMany(fetch = FetchType.LAZY, mappedBy = "cliente")
+public List<Punto> getPuntos() {
+	return puntos;
+}
+public void setPuntos(List<Punto> puntos) {
+	this.puntos = puntos;
+}
 }

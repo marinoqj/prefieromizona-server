@@ -18,6 +18,7 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idCliente", scope = Cliente.class)
@@ -34,6 +35,7 @@ public class Cliente {
     private String dni;
     private String telefono;
     
+    @JsonIgnore
     private Usuario usuario;
 
     @JsonIgnore
@@ -42,8 +44,8 @@ public class Cliente {
     @JsonIgnore
     List<Canje> canjes = new ArrayList<>(0);
 
-//	@JsonIgnore	
-//	List<Punto> puntos = new ArrayList<>(0);
+	@JsonIgnore	
+	List<Punto> puntos = new ArrayList<>(0);
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -138,13 +140,13 @@ public class Cliente {
 		this.usuario = usuario;
 	}
 
-//@OneToMany(fetch = FetchType.LAZY, mappedBy = "cliente")
-//public List<Punto> getPuntos() {
-//	return puntos;
-//}
-//public void setPuntos(List<Punto> puntos) {
-//	this.puntos = puntos;
-//}
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "cliente")
+	public List<Punto> getPuntos() {
+		return puntos;
+	}
+	public void setPuntos(List<Punto> puntos) {
+		this.puntos = puntos;
+	}
     
     
 

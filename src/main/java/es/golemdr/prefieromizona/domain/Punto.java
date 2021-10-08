@@ -16,6 +16,7 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class,property = "idPunto", scope = Punto.class)
@@ -31,8 +32,8 @@ public class Punto{
 	@JoinColumn(name = "id_comercio")
 	private Comercio comercio;
 
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-	@JoinColumn(name = "id_cliente")
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)@JoinColumn(name = "id_cliente")
+	@JsonIgnoreProperties("usuario")
     private Cliente cliente;
     
     @Column(name="TOTAL")
