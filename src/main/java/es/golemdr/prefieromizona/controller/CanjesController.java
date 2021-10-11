@@ -2,10 +2,9 @@ package es.golemdr.prefieromizona.controller;
 
 
 import java.util.List;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
-
-
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,17 +17,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestHeader;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import es.golemdr.prefieromizona.controller.constantes.UrlConstants;
 import es.golemdr.prefieromizona.domain.Canje;
-import es.golemdr.prefieromizona.service.CanjesService;
 import es.golemdr.prefieromizona.ext.Constantes;
+import es.golemdr.prefieromizona.service.CanjesService;
 
 
 @RestController
@@ -51,6 +50,24 @@ public class CanjesController {
 
 		return canjes;
 	}
+	
+	@GetMapping(UrlConstants.CANJES_COMERCIO_ID)
+	public @ResponseBody List<Canje> listadoCanjesComercio(@PathVariable("id") Long idComercio) {
+
+		List<Canje> canjes = null;
+		canjes = canjesService.getCanjesComercio(idComercio);
+
+		return canjes;
+	}
+	
+	@GetMapping(UrlConstants.CANJES_CLIENTE_ID)
+	public @ResponseBody List<Canje> listadoCanjesCliente(@PathVariable("id") Long idCliente) {
+
+		List<Canje> canjes = null;
+		canjes = canjesService.getCanjesCliente(idCliente);
+
+		return canjes;
+	}	
 
 
 	@GetMapping(UrlConstants.CANJES_ID)

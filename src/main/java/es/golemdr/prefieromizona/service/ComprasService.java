@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import es.golemdr.prefieromizona.domain.Cliente;
 import es.golemdr.prefieromizona.domain.Comercio;
 import es.golemdr.prefieromizona.domain.Compra;
 import es.golemdr.prefieromizona.domain.Punto;
@@ -48,15 +49,21 @@ public class ComprasService {
 
 		}
 		
-		public List<Compra> getComprasComercio(Long idComercio) {
+		public List<Compra> getCompras(Long id, String tipo) {
 			
 			List<Compra> result = null;
-
-
 			Compra sample = new Compra();
 			Comercio comercio = new Comercio();
-			comercio.setIdComercio(idComercio);
-			sample.setComercio(comercio);
+			Cliente cliente = new Cliente();
+
+			if (tipo.equals("comercio")) {
+				comercio.setIdComercio(id);
+				sample.setComercio(comercio);
+			} else if (tipo.equals("cliente")) {
+				cliente.setIdCliente(id);
+				sample.setCliente(cliente);				
+			}
+
 			
 			ExampleMatcher matcher = ExampleMatcher.matchingAll();
 			Example<Compra> example = Example.of(sample, matcher);
@@ -66,7 +73,15 @@ public class ComprasService {
 			return result;
 
 		}
+				
 		
+		public List<Compra> getComprasComercio(Long idComercio) {
+			return getCompras(idComercio, "comercio");
+		}
+		
+		public List<Compra> getComprasCliente(Long idCliente) {
+			return getCompras(idCliente, "cliente");
+		}
 
 
 		public int getTotalCompras(){

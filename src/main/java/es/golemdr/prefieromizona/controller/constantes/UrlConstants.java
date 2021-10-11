@@ -25,6 +25,7 @@ public class UrlConstants {
 	public static final String COMPRAS = "/compras";
 	public static final String COMPRAS_ID = "/compras/{id}";
 	public static final String COMPRAS_COMERCIO_ID = "/compras/comercio/{id}";
+	public static final String COMPRAS_CLIENTE_ID = "/compras/cliente/{id}";
 	public static final String COMPRAS_PAGINADO = "/compras/paginado";
 
 	
@@ -32,6 +33,8 @@ public class UrlConstants {
 	public static final String CANJES = "/canjes";
 	public static final String CANJES_ID = "/canjes/{id}";
 	public static final String CANJES_PAGINADO = "/canjes/paginado";
+	public static final String CANJES_COMERCIO_ID = "/canjes/{id}/comercio/";
+	public static final String CANJES_CLIENTE_ID = "/canjes/{id}/cliente/";
 
 	
 
@@ -39,10 +42,12 @@ public class UrlConstants {
 	public static final String PUNTOS = "/puntos";
 	public static final String PUNTOS_ID = "/puntos/{id}";
 	public static final String PUNTOS_PAGINADO = "/puntos/paginado";
+	public static final String PUNTOS_CLIENTE = "/puntos/cliente/{idCliente}";
 
 
 	// USUARIOS
 	public static final String USUARIOS_LOGIN = "/usuarios/{login}";
+
 	
 
 }

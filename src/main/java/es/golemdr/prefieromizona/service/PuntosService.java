@@ -3,15 +3,14 @@ package es.golemdr.prefieromizona.service;
 
 import java.util.List;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-
+import es.golemdr.prefieromizona.domain.Cliente;
 import es.golemdr.prefieromizona.domain.Punto;
 import es.golemdr.prefieromizona.repository.PuntosRepository;
 
@@ -36,6 +35,25 @@ public class PuntosService {
 			return puntosRepository.findAll(paginacion).getContent();
 
 		}
+		
+		
+		public List<Punto> getPuntosCliente(int inicio, int elementosXpagina, Long idCliente) {
+
+			Punto sample = new Punto();
+			Cliente cliente = new Cliente();
+			cliente.setIdCliente(idCliente);
+			sample.setCliente(cliente);
+			
+			ExampleMatcher matcher = ExampleMatcher.matchingAll();
+			Example<Punto> example = Example.of(sample, matcher);
+			
+//			TODO: solucionar paginación			
+//			Pageable paginacion = PageRequest.of(inicio,elementosXpagina);
+
+			return puntosRepository.findAll(example);
+
+		}
+		
 
 
 		public int getTotalPuntos(){

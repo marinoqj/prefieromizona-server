@@ -2,25 +2,25 @@ package es.golemdr.prefieromizona.service;
 
 
 import java.util.List;
-
-import java.util.List;
 import java.util.NoSuchElementException;
 
-import es.golemdr.prefieromizona.domain.Punto;
-import es.golemdr.prefieromizona.repository.PuntosRepository;
+import javax.transaction.Transactional;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-
 import es.golemdr.prefieromizona.domain.Canje;
+import es.golemdr.prefieromizona.domain.Cliente;
+import es.golemdr.prefieromizona.domain.Comercio;
+import es.golemdr.prefieromizona.domain.Punto;
 import es.golemdr.prefieromizona.repository.CanjesRepository;
-
-import javax.transaction.Transactional;
+import es.golemdr.prefieromizona.repository.PuntosRepository;
 
 @Service
 public class CanjesService {
@@ -104,6 +104,40 @@ public class CanjesService {
 			canjesRepository.deleteById(idCanje);
 
 		}
+
+
+		public List<Canje> getCanjesComercio(Long idComercio) {
+			return getCanjes(idComercio, "comercio");
+		}
+		
+		public List<Canje> getCanjesCliente(Long idCliente) {
+			return getCanjes(idCliente, "cliente");
+		}
+		
+		public List<Canje> getCanjes(Long id, String tipo) {
+			List<Canje> result = null;
+
+
+			Canje sample = new Canje();
+			
+			if (tipo.equals("comercio")) {
+				Comercio comercio = new Comercio();
+				
+				comercio.setIdComercio(id);
+				sample.setComercio(comercio);				
+			} else if (tipo.equals("cliente")) {
+				Cliente cliente = new Cliente();
+				cliente.setIdCliente(id);
+				sample.setCliente(cliente);				
+			}
+			
+			ExampleMatcher matcher = ExampleMatcher.matchingAll();
+			Example<Canje> example = Example.of(sample, matcher);
+			
+			result = canjesRepository.findAll(example);
+
+			return result;
+		}		
 
 
 }

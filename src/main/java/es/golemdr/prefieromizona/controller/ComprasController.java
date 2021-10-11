@@ -53,11 +53,12 @@ public class ComprasController {
 	
 	@GetMapping(UrlConstants.COMPRAS_COMERCIO_ID)
 	public @ResponseBody List<Compra> listadoComprasComercio(@PathVariable("id") Long idComercio) {
-
-		List<Compra> compras = null;
-		compras = comprasService.getComprasComercio(idComercio);
-
-		return compras;
+		return comprasService.getComprasComercio(idComercio);
+	}
+	
+	@GetMapping(UrlConstants.COMPRAS_CLIENTE_ID)
+	public @ResponseBody List<Compra> listadoComprasCliente(@PathVariable("id") Long idCliente) {
+		return comprasService.getComprasCliente(idCliente);
 	}	
 
 

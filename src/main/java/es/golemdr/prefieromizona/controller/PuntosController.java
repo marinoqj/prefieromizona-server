@@ -138,6 +138,22 @@ public class PuntosController {
 		return resultado;
 	}
 
+	
+	@GetMapping(UrlConstants.PUNTOS_CLIENTE)
+	public List<Punto> listadoPuntosCliente(@RequestHeader(Constantes.PAGINACION_INICIO) int inicio, @PathVariable("idCliente") Long idCliente,
+			@RequestHeader(Constantes.PAGINACION_ELEMENTOS_PAGINA) int elementosXpagina,
+			HttpServletResponse response) throws JsonProcessingException {
+
+		List<Punto> resultado = null;
+		resultado = puntosService.getPuntosCliente(inicio, elementosXpagina, idCliente);
+
+		int total = 0;
+		total = puntosService.getTotalPuntos();
+		response.addHeader(Constantes.PAGINACION_TOTAL, String.valueOf(total));
+
+		return resultado;
+	}
+
 
 
 }
