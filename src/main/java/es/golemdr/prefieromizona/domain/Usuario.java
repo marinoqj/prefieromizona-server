@@ -17,6 +17,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idUsuario", scope = Usuario.class)
@@ -32,7 +34,8 @@ public class Usuario implements Serializable{
 
 	private List<Rol> roles = new ArrayList<>(0);
 	
-	private Cliente cliente;
+	
+	private Cliente cliente;	
 	private Comercio comercio;
 	
 	
