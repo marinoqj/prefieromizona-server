@@ -48,7 +48,7 @@ public class Cliente {
 	List<Punto> puntos = new ArrayList<>(0);
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_CLIENTE")
     public Long getIdCliente() {
         return idCliente;

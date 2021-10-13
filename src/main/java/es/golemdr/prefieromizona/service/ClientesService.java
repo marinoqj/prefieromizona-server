@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 
 import es.golemdr.prefieromizona.domain.Cliente;
+import es.golemdr.prefieromizona.ext.utils.Generador;
 import es.golemdr.prefieromizona.repository.ClientesRepository;
 
 @Service
@@ -46,6 +47,25 @@ public class ClientesService {
 
 
 		public Cliente insertarActualizarCliente(Cliente cliente) {
+			
+			boolean existsId = false;
+			int idCliente = 0;
+
+			
+			if(cliente.getIdCliente() == null) {
+							
+				do {
+								
+					idCliente =  Generador.generaIdentificador();					
+					
+					existsId = clientesRepository.existsById(Long.valueOf(idCliente));
+					
+					
+				}while(existsId);
+				
+				
+				cliente.setIdCliente(Long.valueOf(idCliente));
+			}
 
 			return clientesRepository.save(cliente);
 
