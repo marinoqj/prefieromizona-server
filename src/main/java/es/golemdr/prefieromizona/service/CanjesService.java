@@ -75,7 +75,7 @@ public class CanjesService {
 			}
 
 
-			if(puntosClienteComercio.getTotal() > canje.getPuntos()){
+			if(puntosClienteComercio.getTotal() >= canje.getPuntos()){
 
 				puntosClienteComercio.setTotal(puntosClienteComercio.getTotal() - canje.getPuntos());
 
