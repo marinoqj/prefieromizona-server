@@ -4,6 +4,7 @@ package es.golemdr.prefieromizona.service;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import javax.persistence.OrderBy;
 import javax.transaction.Transactional;
 
 import org.apache.logging.log4j.LogManager;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import es.golemdr.prefieromizona.domain.Cliente;
@@ -43,7 +45,7 @@ public class ComprasService {
 
 		public List<Compra> getCompras(int inicio, int elementosXpagina) {
 
-			Pageable paginacion = PageRequest.of(inicio,elementosXpagina);
+			Pageable paginacion = PageRequest.of(inicio,elementosXpagina, Sort.by("fechaCompra").descending());
 
 			return comprasRepository.findAll(paginacion).getContent();
 
@@ -68,7 +70,9 @@ public class ComprasService {
 			ExampleMatcher matcher = ExampleMatcher.matchingAll();
 			Example<Compra> example = Example.of(sample, matcher);
 			
-			result = comprasRepository.findAll(example);
+			Sort criterio = Sort.by("fechaCompra").descending();
+			
+			result = comprasRepository.findAll(example, criterio);
 
 			return result;
 

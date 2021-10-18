@@ -13,6 +13,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import es.golemdr.prefieromizona.domain.Canje;
@@ -42,7 +43,7 @@ public class CanjesService {
 
 		public List<Canje> getCanjes(int inicio, int elementosXpagina) {
 
-			Pageable paginacion = PageRequest.of(inicio,elementosXpagina);
+			Pageable paginacion = PageRequest.of(inicio,elementosXpagina, Sort.by("fechaCanje").descending());
 
 			return canjesRepository.findAll(paginacion).getContent();
 
@@ -134,7 +135,9 @@ public class CanjesService {
 			ExampleMatcher matcher = ExampleMatcher.matchingAll();
 			Example<Canje> example = Example.of(sample, matcher);
 			
-			result = canjesRepository.findAll(example);
+			Sort criterio = Sort.by("fechaCanje").descending();
+			
+			result = canjesRepository.findAll(example, criterio);
 
 			return result;
 		}		

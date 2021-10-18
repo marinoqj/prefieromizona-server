@@ -9,5 +9,6 @@ import es.golemdr.prefieromizona.domain.Compra;
 
 @Repository
 public interface ComprasRepository extends JpaRepository<Compra, Long>{
+	
 
 }
