@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prefieromizona-server
+spec:
+  selector:
+    matchLabels:
+      app: prefieromizona
+      tier: backend
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: prefieromizona
+        tier: backend
+    spec:
+      containers:
+      - image: marinoqj/prefieromizona-server:1.0.10
+        imagePullPolicy: Always
+        name: spring-boot
+        ports:
+        - containerPort: 8888
+          protocol: TCP
+
+
+
