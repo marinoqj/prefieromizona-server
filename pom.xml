@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>es.golemdr.prefieromizona</groupId>
 	<artifactId>prefieromizona-server</artifactId>
-	<version>1.0.10</version>
+	<version>1.0.11</version>
 	<name>prefieromizona</name>
 	<description>Servidor con REST</description>
 

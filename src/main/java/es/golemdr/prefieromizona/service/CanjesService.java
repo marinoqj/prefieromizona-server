@@ -82,7 +82,7 @@ public class CanjesService {
 
 			}else{
 
-				throw new Exception("El cliente no tiene tantos puntos como se quieren canjear");
+				throw new Exception("El cliente no tiene tantos puntos para canjear");
 			}
 
 
