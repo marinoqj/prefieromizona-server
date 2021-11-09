@@ -52,13 +52,29 @@ public class ComprasController {
 	}
 	
 	@GetMapping(UrlConstants.COMPRAS_COMERCIO_ID)
-	public @ResponseBody List<Compra> listadoComprasComercio(@PathVariable("id") Long idComercio) {
-		return comprasService.getComprasComercio(idComercio);
+	public @ResponseBody List<Compra> listadoComprasComercio(@PathVariable("id") Long idComercio, @RequestHeader(Constantes.PAGINACION_INICIO) int inicio, 
+			@RequestHeader(Constantes.PAGINACION_ELEMENTOS_PAGINA) int elementosXpagina,
+			HttpServletResponse response) {
+		
+		List<Compra> resultado = comprasService.getComprasComercio(idComercio, inicio, elementosXpagina);
+		
+		int total =  comprasService.getTotalComprasComercio(idComercio);
+		response.addHeader(Constantes.PAGINACION_TOTAL, String.valueOf(total));
+		
+		return resultado;
 	}
 	
 	@GetMapping(UrlConstants.COMPRAS_CLIENTE_ID)
-	public @ResponseBody List<Compra> listadoComprasCliente(@PathVariable("id") Long idCliente) {
-		return comprasService.getComprasCliente(idCliente);
+	public @ResponseBody List<Compra> listadoComprasCliente(@PathVariable("id") Long idCliente, @RequestHeader(Constantes.PAGINACION_INICIO) int inicio, 
+			@RequestHeader(Constantes.PAGINACION_ELEMENTOS_PAGINA) int elementosXpagina,
+			HttpServletResponse response) {
+		
+		List<Compra> resultado = comprasService.getComprasCliente(idCliente, inicio, elementosXpagina);
+		
+		int total =  comprasService.getTotalComprasCliente(idCliente);
+		response.addHeader(Constantes.PAGINACION_TOTAL, String.valueOf(total));
+		
+		return resultado;
 	}	
 
 

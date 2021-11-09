@@ -51,7 +51,7 @@ public class ComprasService {
 
 		}
 		
-		public List<Compra> getCompras(Long id, String tipo) {
+		public List<Compra> getCompras(Long id, String tipo, int inicio, int elementosXpagina) {
 			
 			List<Compra> result = null;
 			Compra sample = new Compra();
@@ -72,21 +72,38 @@ public class ComprasService {
 			
 			Sort criterio = Sort.by("fechaCompra").descending();
 			
-			result = comprasRepository.findAll(example, criterio);
+			if(inicio == 0 && elementosXpagina == 0) {
+			
+				result = comprasRepository.findAll(example, criterio);	
+				
+			}else {
+			
+				Pageable paginacion = PageRequest.of(inicio, elementosXpagina, criterio);
+			
+				result = comprasRepository.findAll(example, paginacion).getContent();
+			}
+			
 
 			return result;
 
 		}
 				
 		
-		public List<Compra> getComprasComercio(Long idComercio) {
-			return getCompras(idComercio, "comercio");
+		public List<Compra> getComprasComercio(Long idComercio, int inicio, int elementosXpagina) {
+			return getCompras(idComercio, "comercio", inicio, elementosXpagina);
 		}
 		
-		public List<Compra> getComprasCliente(Long idCliente) {
-			return getCompras(idCliente, "cliente");
+		public List<Compra> getComprasCliente(Long idCliente, int inicio, int elementosXpagina) {
+			return getCompras(idCliente, "cliente", inicio, elementosXpagina);
+		}
+		
+		public int getTotalComprasComercio(Long idComercio){
+			return getCompras(idComercio, "comercio", 0,0).size();
 		}
 
+		public int getTotalComprasCliente(Long idCliente){
+			return getCompras(idCliente, "cliente", 0,0).size();
+		}
 
 		public int getTotalCompras(){
 
